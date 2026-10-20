@@ -1,0 +1,42 @@
+# Dashboard deployment: scraper is internal and has no host-published API.
+# The original docker-compose.yml remains available for the original CLI workflow.
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: dashboard/Dockerfile
+    ports:
+      - "127.0.0.1:8090:8090"
+    environment:
+      DASHBOARD_DB: /data/leads.sqlite3
+      ENGINE_URL: http://google-maps-scraper:8080
+      # Internal Docker service traffic stays local; public requests retain proxy policy.
+      NO_PROXY: google-maps-scraper,localhost,127.0.0.1
+      no_proxy: google-maps-scraper,localhost,127.0.0.1
+    volumes:
+      - dashboard_data:/data
+    restart: unless-stopped
+    depends_on:
+      google-maps-scraper:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+  google-maps-scraper:
+    image: gosom/google-maps-scraper:v1.18.1
+    command: ["-web", "-data-folder", "/gmapsdata"]
+    restart: unless-stopped
+    volumes:
+      - gmaps_data:/gmapsdata
+      - gmaps_cache:/opt
+    healthcheck:
+      test: ["CMD", "/opt/ms-playwright-go/node", "-e", "require('http').get('http://127.0.0.1:8080/api/v1/jobs',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    # No ports: only the dashboard can reach the unauthenticated API.
+volumes:
+  dashboard_data:
+  gmaps_data:
+  gmaps_cache:

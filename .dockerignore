@@ -1,0 +1,9 @@
+.git
+.env
+**/__pycache__
+*.csv
+*.xlsx
+data
+out
+output
+backups
