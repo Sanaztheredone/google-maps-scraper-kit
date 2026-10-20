@@ -1,5 +1,7 @@
 # Google Maps Scraper Kit
 
+> **داشبورد فارسی آذر دنده تبریز (MVP محلی):** [راهنمای نصب ویندوز، اجرا و پشتیبان‌گیری](WINDOWS-FA.md). برای شروع `start.bat` و برای توقف `stop.bat` را اجرا کنید. معماری و آزمون‌ها: [dashboard/README.md](dashboard/README.md). قابلیت اصلی اسکرپر در ادامه حفظ شده است.
+
 <p align="center">
   <img src="assets/banner.svg" alt="Google Maps Scraper Kit: free local Google Maps scraper for lead generation, driven by Claude Code" width="100%">
 </p>

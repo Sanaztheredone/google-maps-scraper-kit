@@ -16,3 +16,10 @@ __pycache__/
 # OS / editor noise
 .DS_Store
 Thumbs.db
+
+# Local dashboard database, exports and backups
+backups/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.xlsx
